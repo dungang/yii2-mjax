@@ -31,3 +31,15 @@ composer require dungang/mjax
     ]
 ])
 ```
+
+> 注意事项
+
+`ajax`返回的表当页面的`form`不用用`ActiveForm` 默认生成的`id`编号,请手动指定具体一读唯一的编号，比如：option-form
+
+因为发起`ajax`请求的页面的`widget`可能也是自动生成的元素的`id`，则会跟表单页面的id重复就会被覆盖，导致js事件失效
+
+```
+$form = ActiveForm::begin([
+        'id'=>'option-form'
+    ]); 
+```
