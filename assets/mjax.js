@@ -35,6 +35,7 @@
         var instance = $.fn.mjaxInstance;
         return this.each(function () {
             var _this = $(this);
+            var _changed = false;
             _this.click(function (e) {
                 e.preventDefault();
                 instance.modalHeaderTitle.html(_this.html());
@@ -44,7 +45,7 @@
                     });
                     instance.modal.on('hidden.bs.modal',function () {
                         //如果关闭模态框，则刷新当前页面
-                        if( opts.refresh ) window.location.reload();
+                        if( _changed && opts.refresh ) window.location.reload();
                     });
                     //如果有表单，则绑定ajax提交表单
                     instance.modalBody.find('form').on('beforeSubmit',function (event) {
@@ -54,6 +55,7 @@
                             success:function (response) {
                                 //将表单的结果页面覆盖模态框Body
                                 instance.modalBody.html(response);
+                                _changed = true;
                             }
                         });
                     });
