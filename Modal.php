@@ -12,9 +12,9 @@ namespace dungang\mjax;
 use yii\base\Widget;
 use yii\helpers\Json;
 
-class MjaxWidget extends Widget
+class Modal extends Widget
 {
-    public $selector = '.vint-modal';
+    public $selector = '.mjax';
 
     public $options;
 
