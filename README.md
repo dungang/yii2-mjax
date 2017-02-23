@@ -36,7 +36,7 @@ composer require dungang/mjax
 
 > 注意事项
 
-`ajax`返回的表当页面的`form`不用用`ActiveForm` 默认生成的`id`编号,请手动指定具体一读唯一的编号，比如：option-form
+- `ajax`返回的表当页面的`form`不用用`ActiveForm` 默认生成的`id`编号,请手动指定具体一读唯一的编号，比如：option-form
 
 因为发起`ajax`请求的页面的`widget`可能也是自动生成的元素的`id`，则会跟表单页面的id重复就会被覆盖，导致js事件失效
 
@@ -44,6 +44,35 @@ composer require dungang/mjax
 $form = ActiveForm::begin([
         'id'=>'option-form'
     ]); 
+```
+
+- 不要忘记请求视图注册的资源文件输出（js，css）
+
+>> 引用默认的ajax布局文件，dungang/mjax/layout.php。MjaxBehavior自动引用
+
+```
+use dungang\mjax\Alert;
+$this->beginPage();
+echo Alert::widget();
+echo $content;
+$this->endBody();
+$this->endPage();
+```
+
+>> 配置从控制器的`layout`，当时`ajax`请求的时候使用该`layout`
+
+config/web.php
+
+```
+$config  = [
+    ....
+    
+    'as ajax'=>'dungang\mjax\MjaxBehavior',
+    
+    ...
+    
+ 
+ ]
 ```
 
 ## 协议
