@@ -1,0 +1,26 @@
+{
+  "name": "dungang/mjax",
+  "description": "Bootstrap Modal for Yii2 By Ajax ",
+  "license": "MIT",
+  "minimum-stability": "dev",
+  "authors": [
+    {
+      "name": "dun gang",
+      "email": "dungang@126.com",
+      "homepage": "https://github.com/dungang",
+      "role": "Creator"
+    }
+  ],
+  "require": {
+    "php": ">=5.4.0",
+    "yiisoft/yii2": "~2.0.5",
+    "yiisoft/yii2-bootstrap": "*",
+    "bower-asset/jquery-form": "^4.0",
+    "bower-asset/pace":"~v1.0.2"
+  },
+  "autoload": {
+    "psr-4": {
+      "dungang\\mjax\\": ""
+    }
+  }
+}
