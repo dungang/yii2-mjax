@@ -1,5 +1,5 @@
 /**
- * Created by Lenovo on 2017/2/22.
+ * Created by dungang on 2017/2/22.
  */
 +function ($) {
 

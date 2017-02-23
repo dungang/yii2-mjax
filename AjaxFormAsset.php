@@ -4,7 +4,7 @@ use yii\web\AssetBundle;
 
 /**
  * Created by PhpStorm.
- * User: Lenovo
+ * User: dungang
  * Date: 2017/2/22
  * Time: 21:53
  */
