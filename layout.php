@@ -7,7 +7,8 @@
  */
 use dungang\mjax\Alert;
 $this->beginPage();
+$this->head();
 echo Alert::widget();
 echo $content;
 $this->endBody();
-$this->endPage();
+$this->endPage(true);

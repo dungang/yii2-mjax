@@ -39,10 +39,13 @@
             _this.click(function (e) {
                 e.preventDefault();
                 instance.modalHeaderTitle.html(_this.html());
+
                 instance.modalBody.load(_this.attr('href'),function () {
+
                     instance.modal.modal({
                         backdrop:false  //静态模态框，即单鼠标点击模态框的外围时，模态框不关闭。
                     });
+
                     instance.modal.on('hidden.bs.modal',function () {
                         //如果关闭模态框，则刷新当前页面
                         if( _changed && opts.refresh ) window.location.reload();

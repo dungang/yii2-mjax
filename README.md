@@ -53,10 +53,11 @@ $form = ActiveForm::begin([
 ```
 use dungang\mjax\Alert;
 $this->beginPage();
+$this->head();
 echo Alert::widget();
 echo $content;
 $this->endBody();
-$this->endPage();
+$this->endPage(true);
 ```
 
 >> 配置从控制器的`layout`，当时`ajax`请求的时候使用该`layout`
