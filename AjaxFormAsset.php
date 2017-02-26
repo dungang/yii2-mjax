@@ -14,5 +14,6 @@ class AjaxFormAsset extends AssetBundle {
     public $js=['jquery.form.min.js'];
     public $depends = [
         'yii\web\YiiAsset',
+        'yii\bootstrap\BootstrapAsset',
     ];
 }

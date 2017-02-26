@@ -33,6 +33,10 @@
     $.fn.mjax = function (options) {
         var opts = $.extend({},$.fn.mjax.DEFAULTS,options);
         var instance = $.fn.mjaxInstance;
+        //Select2 doesn't work when embedded in a bootstrap modal
+        //搜索框不能输入和聚焦
+        //http://stackoverflow.com/questions/18487056/select2-doesnt-work-when-embedded-in-a-bootstrap-modal
+        if ($.fn.modal) $.fn.modal.Constructor.prototype.enforceFocus = function () {};
         return this.each(function () {
             var _this = $(this);
             var _changed = false;
