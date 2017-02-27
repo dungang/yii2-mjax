@@ -28,7 +28,33 @@
             modalBody:modalBody,
             modalFooter:modalFooter
         };
+
+        modalBody.on('update',function () {
+            //如果有表单，则绑定ajax提交表单yiiActiveForm
+            modalBody.find('form').each(function(){
+                var _form = $(this);
+                var eventName = 'submit';
+                if (_form.data('yiiActiveForm')) {
+                    eventName = 'beforeSubmit';
+                }
+                _form.on(eventName,function (event) {
+                    //通知yii.activeForm 不要提交表单，由本对象通过ajax的方式提交表单
+                    event.result = false;
+                    $(this).ajaxSubmit({
+                        success:function (response) {
+                            //将表单的结果页面覆盖模态框Body
+                            modalBody.html(response);
+                            modalBody.trigger('update');
+                            _changed = true;
+                        }
+                    });
+                    return false;
+                });
+            });
+        });
     }
+    //页面是否发送变化
+    var _changed = false;
 
     $.fn.mjax = function (options) {
         var opts = $.extend({},$.fn.mjax.DEFAULTS,options);
@@ -39,7 +65,7 @@
         if ($.fn.modal) $.fn.modal.Constructor.prototype.enforceFocus = function () {};
         return this.each(function () {
             var _this = $(this);
-            var _changed = false;
+            _changed = false;
             _this.click(function (e) {
                 e.preventDefault();
                 instance.modalHeaderTitle.html(_this.html());
@@ -54,18 +80,9 @@
                         //如果关闭模态框，则刷新当前页面
                         if( _changed && opts.refresh ) window.location.reload();
                     });
-                    //如果有表单，则绑定ajax提交表单
-                    instance.modalBody.find('form').on('beforeSubmit',function (event) {
-                        //通知yii.activeForm 不要提交表单，由本对象通过ajax的方式提交表单
-                        event.result = false;
-                        $(this).ajaxSubmit({
-                            success:function (response) {
-                                //将表单的结果页面覆盖模态框Body
-                                instance.modalBody.html(response);
-                                _changed = true;
-                            }
-                        });
-                    });
+
+                    instance.modalBody.trigger('update');
+
                 });
             });
         });
