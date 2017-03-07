@@ -24,7 +24,7 @@ class MjaxBehavior extends Behavior
     public function mjax()
     {
         if(\Yii::$app->request->isAjax){
-            $this->owner->layout = '@vendor/dungang/mjax/layout';
+            \Yii::$app->layout = '@vendor/dungang/mjax/layout';
         }
     }
 }
