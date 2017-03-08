@@ -66,7 +66,7 @@
         return this.each(function () {
             var _this = $(this);
             //关闭模态框的时候是否刷新当前页面
-            var _refresh = _this.data('refresh');
+            var _refresh = _this.data('mjax-refresh');
 
             if (_refresh) {
                 opts.refresh = _refresh;
