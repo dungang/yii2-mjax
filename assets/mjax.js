@@ -65,6 +65,13 @@
         if ($.fn.modal) $.fn.modal.Constructor.prototype.enforceFocus = function () {};
         return this.each(function () {
             var _this = $(this);
+            //关闭模态框的时候是否刷新当前页面
+            var _refresh = _this.data('refresh');
+
+            if (_refresh) {
+                opts.refresh = _refresh;
+            }
+
             _changed = false;
             _this.click(function (e) {
                 e.preventDefault();
@@ -87,7 +94,12 @@
             });
         });
     };
+
     $.fn.mjax.DEFAULTS = {
         refresh:false //关闭模态框的时候是否刷新当前页面
     };
+
+    $(document).ready(function () {
+        $('.mjax').mjax();
+    });
 }(jQuery);
