@@ -20,31 +20,30 @@
         $('body').append(modal);
 
         $.fn.mjaxInstance = {
-            modal:modal,
-            modalDoc:modalDoc,
-            modalContent:modalContent,
-            modalHeader:modalHeader,
-            modalHeaderTitle:modalHeaderTitle,
-            modalBody:modalBody,
-            modalFooter:modalFooter
+            modal: modal,
+            modalDoc: modalDoc,
+            modalContent: modalContent,
+            modalHeader: modalHeader,
+            modalHeaderTitle: modalHeaderTitle,
+            modalBody: modalBody,
+            modalFooter: modalFooter
         };
 
-        modalBody.on('update',function () {
+        modalBody.on('update', function () {
             //如果有表单，则绑定ajax提交表单yiiActiveForm
-            modalBody.find('form').each(function(){
+            modalBody.find('form').each(function () {
                 var _form = $(this);
                 var eventName = 'submit';
                 if (_form.data('yiiActiveForm')) {
                     eventName = 'beforeSubmit';
                 }
-                _form.on(eventName,function (event) {
+                _form.on(eventName, function (event) {
                     //通知yii.activeForm 不要提交表单，由本对象通过ajax的方式提交表单
                     event.result = false;
                     $(this).ajaxSubmit({
-                        success:function (response) {
+                        success: function (response) {
                             //将表单的结果页面覆盖模态框Body
-                            modalBody.html(response);
-                            modalBody.trigger('update');
+                            extractContent(response,modalBody);
                             _changed = true;
                         }
                     });
@@ -57,14 +56,20 @@
     var _changed = false;
 
     $.fn.mjax = function (options) {
-        var opts = $.extend({},$.fn.mjax.DEFAULTS,options);
+        var opts = $.extend({}, $.fn.mjax.DEFAULTS, options);
         var instance = $.fn.mjaxInstance;
         //Select2 doesn't work when embedded in a bootstrap modal
         //搜索框不能输入和聚焦
         //http://stackoverflow.com/questions/18487056/select2-doesnt-work-when-embedded-in-a-bootstrap-modal
-        if ($.fn.modal) $.fn.modal.Constructor.prototype.enforceFocus = function () {};
+        if ($.fn.modal) $.fn.modal.Constructor.prototype.enforceFocus = function () {
+        };
         return this.each(function () {
             var _this = $(this);
+            if (_this.data('mjax-bind')) {
+                return;
+            } else {
+                _this.data('mjax-bind',true);
+            }
             //关闭模态框的时候是否刷新当前页面
             var _refresh = _this.data('mjax-refresh');
 
@@ -77,26 +82,84 @@
                 e.preventDefault();
                 instance.modalHeaderTitle.html(_this.html());
 
-                instance.modalBody.load(_this.attr('href'),function () {
+                $.get(_this.attr('href'), function (response) {
 
                     instance.modal.modal({
-                        backdrop:false  //静态模态框，即单鼠标点击模态框的外围时，模态框不关闭。
+                        backdrop: false  //静态模态框，即单鼠标点击模态框的外围时，模态框不关闭。
                     });
 
-                    instance.modal.on('hidden.bs.modal',function () {
+                    instance.modal.on('hidden.bs.modal', function () {
                         //如果关闭模态框，则刷新当前页面
-                        if( _changed && opts.refresh ) window.location.reload();
+                        if (_changed && opts.refresh) window.location.reload();
                     });
-
-                    instance.modalBody.trigger('update');
-
+                    extractContent(response,instance.modalBody);
                 });
             });
         });
     };
 
+    function extractContent(response,context) {
+        var content = $($.parseHTML(response,document,true));
+        var scripts = findAll(content,'script').remove();
+        var links = findAll(content,'link').remove();
+        context.html(content.not(scripts).not(links));
+        executeTags(links,context,'link','href');
+        executeTags(scripts,context,'script','src');
+        context.trigger('update');
+    }
+
+    function findAll(elems, selector) {
+        return elems.filter(selector).add(elems.find(selector));
+    }
+
+    // Load an execute scripts using standard script request.
+    //
+    // Avoids jQuery's traditional $.getScript which does a XHR request and
+    // globalEval.
+    //
+    // scripts - jQuery object of script Elements
+    // context - jQuery object whose context is `document` and has a selector
+    //
+    // Returns nothing.
+    function executeTags(tags,context,tag, attr) {
+        if (!tags) return;
+
+        var existingTags= $(tag + '['+attr+']');
+
+        var cb = function (next) {
+            var attribute = this[attr];
+            var matchedTags = existingTags.filter(function () {
+                return this[attr] === attribute
+            });
+
+            if (matchedTags.length) {
+                next();
+                return
+            }
+
+            if (attribute) {
+                $.getScript(attribute).done(next).fail(next);
+                document.head.appendChild(this)
+            } else {
+                context.append(this);
+                next()
+            }
+        };
+
+        var i = 0;
+        var next = function () {
+            if (i >= tags.length) {
+                return
+            }
+            var tag = tags[i];
+            i++;
+            cb.call(tag, next)
+        };
+        next()
+    }
+
     $.fn.mjax.DEFAULTS = {
-        refresh:false //关闭模态框的时候是否刷新当前页面
+        refresh: false //关闭模态框的时候是否刷新当前页面
     };
 
     $(document).ready(function () {
