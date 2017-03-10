@@ -84,15 +84,15 @@
 
                 $.get(_this.attr('href'), function (response) {
 
-                    instance.modal.modal({
-                        backdrop: false  //静态模态框，即单鼠标点击模态框的外围时，模态框不关闭。
-                    });
-
                     instance.modal.on('hidden.bs.modal', function () {
                         //如果关闭模态框，则刷新当前页面
                         if (_changed && opts.refresh) window.location.reload();
                     });
                     extractContent(response,instance.modalBody);
+
+                    instance.modal.modal({
+                        backdrop: false  //静态模态框，即单鼠标点击模态框的外围时，模态框不关闭。
+                    });
                 });
             });
         });
@@ -103,8 +103,8 @@
         var scripts = findAll(content,'script').remove();
         var links = findAll(content,'link').remove();
         context.html(content.not(scripts).not(links));
-        executeTags(links,context,'link','href');
-        executeTags(scripts,context,'script','src');
+        executeTags(links,context,'link','href',true);
+        executeTags(scripts,context,'script','src',true);
         context.trigger('update');
     }
 
@@ -121,7 +121,7 @@
     // context - jQuery object whose context is `document` and has a selector
     //
     // Returns nothing.
-    function executeTags(tags,context,tag, attr) {
+    function executeTags(tags,context,tag, attr,reload) {
         if (!tags) return;
 
         var existingTags= $(tag + '['+attr+']');
@@ -138,7 +138,7 @@
             }
 
             if (attribute) {
-                $.getScript(attribute).done(next).fail(next);
+                if(reload) $.getScript(attribute).done(next).fail(next);
                 document.head.appendChild(this)
             } else {
                 context.append(this);
