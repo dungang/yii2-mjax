@@ -29,7 +29,7 @@
             modalFooter: modalFooter
         };
 
-        modalBody.on('update', function () {
+        modalBody.on('update', function (event) {
             //如果有表单，则绑定ajax提交表单yiiActiveForm
             modalBody.find('form').each(function () {
                 var _form = $(this);
@@ -50,6 +50,7 @@
                     return false;
                 });
             });
+
         });
     }
     //页面是否发送变化
@@ -79,6 +80,7 @@
 
             _changed = false;
             _this.click(function (e) {
+                var arch = $(this);
                 e.preventDefault();
                 instance.modalHeaderTitle.html(_this.html());
 
@@ -89,6 +91,14 @@
                         if (_changed && opts.refresh) window.location.reload();
                     });
                     extractContent(response,instance.modalBody);
+
+                    var modalSize = arch.data('mjax-size');
+                    instance.modalDoc.removeClass('modal-lg').removeClass('modal-sm');
+                    if ( modalSize== 'sm') {
+                        instance.modalDoc.addClass('modal-sm');
+                    } else if (modalSize == 'lg') {
+                        instance.modalDoc.addClass('modal-lg');
+                    }
 
                     instance.modal.modal({
                         backdrop: false  //静态模态框，即单鼠标点击模态框的外围时，模态框不关闭。
