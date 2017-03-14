@@ -15,14 +15,34 @@ composer require dungang/mjax
 
 必须是比较熟悉`Yii2` 框架
 
+> (可选)注册模态框
+
+注册行为之后，已经默认注册了该部件
+
+```
+\dungang\mjax\Modal::widget([
+    'selector'=>'.mjax',  //注册对象，默认为`.mjax`
+    'options'=>[
+        'refresh'=>true //关闭模态框后是否刷新当前页面
+    ]
+])
+```
+
+
 > 标记要绑定模态框的锚点
 
-锚点标签添加 class `mjax`
+* 锚点标签添加 class `mjax`
+* 关闭窗口是否刷新页面：data-mjax-refresh=true,如果设置了该属性，优先级最高，option设置的refresh
+* 设置模态框的大小，支持3中大小：,
+    - 默认 中等窗口
+    - lg   大窗口
+    - sm   小窗口
 
 ```
 <?= Html::a('<i class="fa fa-plus"></i> '.Yii::t('app', 'Create'), ['create'],
-            ['class' => 'btn btn-primary mjax']) ?>
+            ['class' => 'btn btn-primary mjax','data-mjax-size'=>'lg']) ?>
 ```
+
 
 
 > 注意事项
