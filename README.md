@@ -15,19 +15,6 @@ composer require dungang/yii2-mjax
 
 必须是比较熟悉`Yii2` 框架
 
-> (可选)注册模态框
-
-注册行为之后，已经默认注册了该部件
-
-```
-\dungang\mjax\Modal::widget([
-    'selector'=>'.mjax',  //注册对象，默认为`.mjax`
-    'options'=>[
-        'refresh'=>true //关闭模态框后是否刷新当前页面
-    ]
-])
-```
-
 
 > 标记要绑定模态框的锚点
 
@@ -73,6 +60,19 @@ $config  = [
     
  
  ]
+```
+
+> (optional)注册模态框
+
+注册行为之后，已经默认注册了该部件
+
+```
+\dungang\mjax\Modal::widget([
+    'selector'=>'.mjax',  //注册对象，默认为`.mjax`
+    'options'=>[
+        'refresh'=>true //关闭模态框后是否刷新当前页面
+    ]
+])
 ```
 
 ## 协议
