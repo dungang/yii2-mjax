@@ -29,9 +29,9 @@
             modalFooter: modalFooter
         };
 
-        modalBody.on('update', function (event) {
+        modalBody.on('updateBody', function (event) {
             //如果有表单，则绑定ajax提交表单yiiActiveForm
-            modalBody.find('form').each(function () {
+            modalBody.find('form').each(function (index) {
                 var _form = $(this);
                 var eventName = 'submit';
                 if (_form.data('yiiActiveForm')) {
@@ -73,25 +73,20 @@
             }
             //关闭模态框的时候是否刷新当前页面
             var _refresh = _this.data('mjax-refresh');
-
             if (_refresh) {
                 opts.refresh = _refresh;
             }
-
             _changed = false;
             _this.click(function (e) {
                 var arch = $(this);
                 e.preventDefault();
                 instance.modalHeaderTitle.html(_this.html());
-
                 $.get(_this.attr('href'), function (response) {
-
                     instance.modal.on('hidden.bs.modal', function () {
                         //如果关闭模态框，则刷新当前页面
                         if (_changed && opts.refresh) window.location.reload();
                     });
                     extractContent(response,instance.modalBody);
-
                     var modalSize = arch.data('mjax-size');
                     instance.modalDoc.removeClass('modal-lg').removeClass('modal-sm');
                     if ( modalSize== 'sm') {
@@ -99,7 +94,6 @@
                     } else if (modalSize == 'lg') {
                         instance.modalDoc.addClass('modal-lg');
                     }
-
                     instance.modal.modal({
                         backdrop: false  //静态模态框，即单鼠标点击模态框的外围时，模态框不关闭。
                     });
@@ -112,10 +106,14 @@
         var content = $($.parseHTML(response,document,true));
         var scripts = findAll(content,'script').remove();
         var links = findAll(content,'link').remove();
-        context.html(content.not(scripts).not(links));
-        executeTags(links,context,'link','href',true);
-        executeTags(scripts,context,'script','src',true);
-        context.trigger('update');
+        context.empty().html(content.not(scripts).not(links));
+        $.when(
+            executeTags(links,context,'link','href',true),
+            executeTags(scripts,context,'script','src',true)
+        ).done(function () {
+            context.trigger('updateBody');
+        });
+
     }
 
     function findAll(elems, selector) {
@@ -132,40 +130,38 @@
     //
     // Returns nothing.
     function executeTags(tags,context,tag, attr,reload) {
-        if (!tags) return;
-
+        if (!tags) return false;
+        var dtd = $.Deferred();
         var existingTags= $(tag + '['+attr+']');
-
         var cb = function (next) {
             var attribute = this[attr];
             var matchedTags = existingTags.filter(function () {
                 return this[attr] === attribute
             });
-
             if (matchedTags.length) {
                 next();
                 return
             }
-
             if (attribute) {
                 if(reload) $.getScript(attribute).done(next).fail(next);
-                document.head.appendChild(this)
+                document.head.appendChild(this);
             } else {
                 context.append(this);
                 next()
             }
         };
-
         var i = 0;
         var next = function () {
             if (i >= tags.length) {
+                dtd.resolve();
                 return
             }
             var tag = tags[i];
             i++;
             cb.call(tag, next)
         };
-        next()
+        next();
+        return dtd;
     }
 
     $.fn.mjax.DEFAULTS = {
