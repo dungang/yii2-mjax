@@ -15,7 +15,7 @@ class MjaxAsset extends AssetBundle
 {
     public $sourcePath = '@bower/jquery.mjax/src';
 
-    public $js = ['mjax.js'];
+    public $js = ['jquery.mjax.js'];
 
     public $depends = [
         'yii\web\YiiAsset',
