@@ -30,7 +30,7 @@ class MjaxBehavior extends Behavior
         \Yii::$app->controller->view->attachBehavior('mJaxBehavior',$this);
         \Yii::$app->response->attachBehavior('mJaxBehavior',$this);
         if(\Yii::$app->request->isAjax){
-            \Yii::$app->layout = '@vendor/dungang/mjax/layout';
+            \Yii::$app->layout = '@vendor/dungang/yii2-mjax/layout';
         }
     }
 
