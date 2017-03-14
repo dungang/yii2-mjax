@@ -152,7 +152,7 @@
             });
             if (matchedTags.length) {
                 next();
-                return
+                return;
             }
             if (attribute) {
                 if(reload) $.getScript(attribute).done(next).fail(next);
