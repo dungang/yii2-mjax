@@ -29,9 +29,9 @@
             modalFooter: modalFooter
         };
 
-        modalBody.on('updateBody', function (event) {
+        modalBody.on('updateBody', function () {
             //如果有表单，则绑定ajax提交表单yiiActiveForm
-            modalBody.find('form').each(function (index) {
+            modalBody.find('form').each(function () {
                 var _form = $(this);
                 var eventName = 'submit';
                 if (_form.data('yiiActiveForm')) {
@@ -41,6 +41,18 @@
                     //通知yii.activeForm 不要提交表单，由本对象通过ajax的方式提交表单
                     event.result = false;
                     $(this).ajaxSubmit({
+                        complete:function (xhr) {
+                            //X-Mjax-Redirect 309
+                            if(xhr.status == 309) {
+                                var redirect = xhr.getResponseHeader('X-Mjax-Redirect');
+                                $.get(redirect,function (response) {
+                                    //将表单的结果页面覆盖模态框Body
+                                    extractContent(response,modalBody);
+                                    _changed = true;
+                                })
+                            }
+
+                        },
                         success: function (response) {
                             //将表单的结果页面覆盖模态框Body
                             extractContent(response,modalBody);
