@@ -13,6 +13,7 @@ use yii\web\AssetBundle;
 
 class MjaxAsset extends AssetBundle
 {
+    public $sourcePath = '@bower/jquery.mjax/src';
 
     public $js = ['mjax.js'];
 
@@ -21,8 +22,4 @@ class MjaxAsset extends AssetBundle
         'yii\bootstrap\BootstrapAsset',
         'dungang\mjax\AjaxFormAsset'
     ];
-    
-    public function init(){
-    	$this->sourcePath = __DIR__ . "/assets";
-    }
 }
