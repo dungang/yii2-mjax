@@ -1,4 +1,4 @@
-# mjax
+# yii2-mjax
 
 Bootstrap Modal for Yii2 By Ajax.解决在当前页面弹出编辑页面或者展示信息，不用跳转到其他页面。与Pjax不冲突。
 增加状态编码309 X-Mjax-Redirect ，替换302，达到局部跳转的效果。不影响项目已经完成的业务逻辑
