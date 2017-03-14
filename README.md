@@ -8,7 +8,7 @@ Bootstrap Modal for Yii2 By Ajax.解决在当前页面弹出编辑页面或者�
 ## 安装
 
 ```
-composer require dungang/mjax
+composer require dungang/yii2-mjax
 ```
 
 ## 使用
