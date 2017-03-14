@@ -1,6 +1,7 @@
 # mjax
 
 Bootstrap Modal for Yii2 By Ajax.解决在当前页面弹出编辑页面或者展示信息，不用跳转到其他页面。与Pjax不冲突。
+增加状态编码309 X-Mjax-Redirect ，替换302，达到局部跳转的效果。不影响项目已经完成的业务逻辑
 
 ![模态框](images/mjax.gif)
 
@@ -23,16 +24,6 @@ composer require dungang/mjax
             ['class' => 'btn btn-primary mjax']) ?>
 ```
 
-> 注册模态框
-
-```
-\dungang\mjax\Modal::widget([
-    'selector'=>'.mjax',  //注册对象，默认为`.mjax`
-    'options'=>[
-        'refresh'=>true //关闭模态框后是否刷新当前页面
-    ]
-])
-```
 
 > 注意事项
 
@@ -46,19 +37,7 @@ $form = ActiveForm::begin([
     ]); 
 ```
 
-- 不要忘记请求视图注册的资源文件输出（js，css）
 
->> 引用默认的ajax布局文件，dungang/mjax/layout.php。MjaxBehavior自动引用
-
-```
-use dungang\mjax\Alert;
-$this->beginPage();
-$this->head();
-echo Alert::widget();
-echo $content;
-$this->endBody();
-$this->endPage(true);
-```
 
 >> 配置从控制器的`layout`，当时`ajax`请求的时候使用该`layout`
 
