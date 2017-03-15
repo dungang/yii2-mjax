@@ -37,7 +37,13 @@ class MjaxBehavior extends Behavior
     public function beginPage()
     {
         MjaxAsset::register(\Yii::$app->controller->view);
-        \Yii::$app->controller->view->registerJs("$('.mjax').mjax({pointAttr:'yiiActiveForm',pointEvent:'beforeSubmit'});");
+        \Yii::$app->controller
+            ->view->registerJs("$('.mjax').mjax({
+                pointForm:function(){ 
+                    return this.data('yiiActiveForm') != 'undefined';
+                },
+                pointEvent: 'beforeSubmit'
+            });");
     }
 
     public function changeRedirectCode(){
