@@ -48,7 +48,7 @@ class MjaxBehavior extends Behavior
 
     public function changeRedirectCode(){
 
-        if (\Yii::$app->response->getStatusCode() == 302) {
+        if (\Yii::$app->request->isAjax && \Yii::$app->response->getStatusCode() == 302) {
             \Yii::$app->response->setStatusCode(309,'Mjax Redirect');
             //309状态码没有被使用，所以选择此状态编码作为mjax的跳转编码
             $xRedirect =  \Yii::$app->response->getHeaders()->get('X-Redirect');
