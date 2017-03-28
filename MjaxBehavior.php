@@ -19,17 +19,17 @@ class MjaxBehavior extends Behavior
     public function events()
     {
         return [
-            Module::EVENT_BEFORE_ACTION=>'mJax',
+            Module::EVENT_BEFORE_ACTION=>'startMjax',
             View::EVENT_BEGIN_PAGE=>'beginPage',
             Response::EVENT_AFTER_PREPARE => 'changeRedirectCode'
         ];
     }
 
-    public function mJax()
+    public function startMjax()
     {
         \Yii::$app->controller->view->attachBehavior('mJaxBehavior',$this);
         \Yii::$app->response->attachBehavior('mJaxBehavior',$this);
-        if(\Yii::$app->request->isAjax){
+        if($this->isMjax()){
             \Yii::$app->layout = '@vendor/dungang/yii2-mjax/layout';
         }
     }
@@ -48,7 +48,7 @@ class MjaxBehavior extends Behavior
 
     public function changeRedirectCode(){
 
-        if (\Yii::$app->request->isAjax && \Yii::$app->response->getStatusCode() == 302) {
+        if ($this->isMjax() && \Yii::$app->response->getStatusCode() == 302) {
             \Yii::$app->response->setStatusCode(309,'Mjax Redirect');
             //309状态码没有被使用，所以选择此状态编码作为mjax的跳转编码
             $xRedirect =  \Yii::$app->response->getHeaders()->get('X-Redirect');
@@ -61,5 +61,14 @@ class MjaxBehavior extends Behavior
                 \Yii::$app->response->getHeaders()->set('X-Mjax-Redirect',$location);
             }
         }
+    }
+
+    public function isMjax()
+    {
+        $headers = \Yii::$app->request->getHeaders();
+        if (isset($headers['X-Mjax-Request'])) {
+            return true;
+        }
+        return false;
     }
 }
