@@ -16,6 +16,8 @@ use yii\web\Response;
 
 class MjaxBehavior extends Behavior
 {
+    public $refresh = false;
+
     public function events()
     {
         return [
@@ -39,6 +41,7 @@ class MjaxBehavior extends Behavior
         MjaxAsset::register(\Yii::$app->controller->view);
         \Yii::$app->controller
             ->view->registerJs("$('.mjax').mjax({
+                refresh: $this->refresh,
                 pointForm:function(){ 
                     return this.data('yiiActiveForm') != 'undefined';
                 },
