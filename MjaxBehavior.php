@@ -70,7 +70,15 @@ class MjaxBehavior extends Behavior
 
     public function beginPage()
     {
-        MjaxAsset::register(\Yii::$app->controller->view);
+        $view = \Yii::$app->controller->view;
+        //when ajax requrest ,not reload assets
+        if (!\Yii::$app->request->isAjax) {
+            MjaxAsset::register($view);
+        }
+        //do more,do worse
+//        else {
+//            $view->clear();
+//        }
         \Yii::$app->controller
             ->view->registerJs("$('.mjax').mjax({
                 refresh: $this->refresh,
