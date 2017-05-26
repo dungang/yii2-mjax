@@ -17,7 +17,7 @@ use yii\web\Response;
 
 class MjaxBehavior extends Behavior
 {
-    public $refresh = false;
+    public $refresh = 'false';
 
     /**
      * @var array the alert types configuration for the flash messages.
@@ -83,7 +83,7 @@ class MjaxBehavior extends Behavior
             ->view->registerJs("$('.mjax').mjax({
                 refresh: $this->refresh,
                 pointForm:function(){ 
-                    return this.data('yiiActiveForm') != 'undefined';
+                    return this.data('yiiActiveForm') != undefined;
                 },
                 pointEvent: 'beforeSubmit'
             });");
