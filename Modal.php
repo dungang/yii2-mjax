@@ -30,6 +30,5 @@ class Modal extends Widget
         $options = empty($this->options) ? '' : Json::htmlEncode($this->options);
         $js = "jQuery('$this->selector').mjax($options);";
         $view->registerJs($js);
-
     }
 }
