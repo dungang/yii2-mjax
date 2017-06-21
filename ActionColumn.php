@@ -160,7 +160,7 @@ class ActionColumn extends Column
                         'class' => 'btn btn-xs btn-success ' . $mjaxClass,
                     ], $this->buttonOptions),
                     'update');
-                return Html::a('<span class="fa fa-pencil"></span> ' . $options['title'], $url, $options);
+                return Html::a('<span class="fa fa-eye"></span> ' , $url, $options);
             };
         }
         if (!isset($this->buttons['update'])) {
@@ -178,7 +178,7 @@ class ActionColumn extends Column
                         'class' => 'btn btn-xs btn-primary ' . $mjaxClass,
                     ], $this->buttonOptions),
                     'update');
-                return Html::a('<span class="fa fa-pencil"></span> ' . $options['title'], $url, $options);
+                return Html::a('<span class="fa fa-pencil"></span> ', $url, $options);
             };
         }
         if (!isset($this->buttons['delete'])) {
@@ -191,7 +191,7 @@ class ActionColumn extends Column
                     'data-pjax' => '0',
                     'class' => 'btn btn-xs btn-danger ',
                 ], $this->buttonOptions);
-                return Html::a('<span class="fa fa-trash"></span> ' . $options['title'], $url, $options);
+                return Html::a('<span class="fa fa-trash"></span> ' , $url, $options);
             };
         }
     }
