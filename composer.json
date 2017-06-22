@@ -15,7 +15,7 @@
     "php": ">=5.4.0",
     "yiisoft/yii2": "~2.0.5",
     "yiisoft/yii2-bootstrap": "*",
-    "bower-asset/jquery.mjax": "~1.0.1"
+    "bower-asset/jquery.mjax": "~1.0.4"
   },
   "autoload": {
     "psr-4": {
